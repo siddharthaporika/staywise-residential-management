@@ -11,7 +11,7 @@ A beginner-friendly full-stack residence management dashboard built with **Pytho
 - Maintenance complaint creation and status updates
 - SQLite database stored locally in `hostel.db`
 
-## Run locally (macOS)
+## Run locally
 
 1. Open this folder in VS Code.
 2. Open **Terminal → New Terminal**.
