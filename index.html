@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Staywise | Residence Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-icon">S</div><div><b>staywise</b><small>RESIDENCE OS</small></div></div>
+    <div class="side-label">WORKSPACE</div>
+    <button class="nav-item active" data-view="overview"><span>◫</span> Overview</button>
+    <button class="nav-item" data-view="students"><span>♙</span> Residents <em id="nav-students">—</em></button>
+    <button class="nav-item" data-view="rooms"><span>▦</span> Rooms</button>
+    <button class="nav-item" data-view="complaints"><span>◇</span> Maintenance <em id="nav-complaints">—</em></button>
+    <div class="sidebar-bottom"><div class="help-card"><div class="help-icon">✦</div><b>Need a hand?</b><p>Your residence, a little more organised.</p><span>STAYWISE · DEMO</span></div><div class="profile"><div class="avatar">AD</div><div><b>Admin desk</b><small>Residence manager</small></div><span class="dots">•••</span></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="crumb">Workspace <span>/</span> <b id="crumb-title">Overview</b></div><div class="top-actions"><span class="live-dot"></span><span class="sync-label">System operational</span><button class="icon-button" id="refresh" title="Refresh">↻</button><div class="top-avatar">AD</div></div></header>
+    <section class="page-head"><div><div class="eyebrow"><span class="eyebrow-line"></span> RESIDENCE MANAGEMENT</div><h1 id="page-title">A better view of <i>campus living.</i></h1><p id="page-subtitle">Your residence at a glance. Everything in its right place.</p></div><div class="head-actions"><button class="secondary-action hidden" id="allocate-room-top">＋ Allocate room</button><button class="primary-btn hidden" id="new-resident">＋ Register resident</button><button class="primary-btn hidden" id="new-complaint">＋ Log a complaint</button></div></section>
+    <section id="view-overview" class="view">
+      <div class="metric-grid">
+        <article class="metric-card"><div class="metric-top"><span>Total residents</span><span class="metric-icon violet">♙</span></div><div class="metric-value" id="m-students">—</div><div class="metric-foot"><span class="tiny-dot violet-dot"></span> Registered in the system</div></article>
+        <article class="metric-card"><div class="metric-top"><span>Room occupancy</span><span class="metric-icon mint">▦</span></div><div class="metric-value"><span id="m-occupancy">—</span><small>%</small></div><div class="progress"><span id="occupancy-bar"></span></div><div class="metric-foot"><span id="m-occupied">—</span> beds occupied</div></article>
+        <article class="metric-card"><div class="metric-top"><span>Available beds</span><span class="metric-icon amber">⌂</span></div><div class="metric-value" id="m-vacant">—</div><div class="metric-foot">Across <span id="m-rooms">—</span> rooms</div></article>
+        <article class="metric-card"><div class="metric-top"><span>Active requests</span><span class="metric-icon coral">◇</span></div><div class="metric-value" id="m-open">—</div><div class="metric-foot"><span class="tiny-dot coral-dot"></span> Need attention</div></article>
+      </div>
+      <div class="content-grid">
+        <article class="panel occupancy-panel"><div class="panel-heading"><div><h2>Room utilisation</h2><p>Capacity across your residence</p></div><span class="pill green-pill">Live overview</span></div><div class="utilisation"><div class="donut" id="donut"><div><b id="donut-value">—%</b><small>occupied</small></div></div><div class="legend"><div><span class="legend-dot filled"></span><div><b id="legend-occupied">—</b><small>Occupied beds</small></div></div><div><span class="legend-dot vacant"></span><div><b id="legend-vacant">—</b><small>Available beds</small></div></div><div class="legend-note">A clear picture helps you plan room assignments with confidence.</div></div></div></article>
+        <article class="panel category-panel"><div class="panel-heading"><div><h2>Maintenance insights</h2><p>Requests by category</p></div><span class="chart-mark">↗</span></div><div id="category-chart" class="category-chart"><div class="empty">Loading insights…</div></div><div class="chart-foot"><span class="tiny-dot violet-dot"></span> Based on recorded complaints</div></article>
+      </div>
+      <article class="panel requests-panel"><div class="panel-heading"><div><h2>Recent maintenance requests</h2><p>Keep the little things from becoming big things.</p></div><button class="text-btn" data-goto="complaints">View all requests <span>→</span></button></div><div class="table-wrap"><table><thead><tr><th>REQUEST</th><th>RESIDENT</th><th>ROOM</th><th>PRIORITY</th><th>STATUS</th></tr></thead><tbody id="recent-table"><tr><td colspan="5" class="empty">Loading requests…</td></tr></tbody></table></div></article>
+    </section>
+    <section id="view-students" class="view hidden"><article class="panel full-panel"><div class="panel-heading"><div><h2>Residents</h2><p>Directory and room assignments</p></div><input id="student-search" class="search" placeholder="⌕  Search residents…"></div><div class="table-wrap"><table><thead><tr><th>RESIDENT</th><th>ROLL NUMBER</th><th>DEPARTMENT</th><th>YEAR</th><th>HOSTEL / ROOM</th></tr></thead><tbody id="students-table"></tbody></table></div></article></section>
+    <section id="view-rooms" class="view hidden"><div class="room-intro"><div><h2>Room directory</h2><p>Availability, at a glance.</p></div><div class="room-key"><span class="legend-dot filled"></span> Occupied <span class="legend-dot vacant"></span> Available</div></div><div id="room-grid" class="room-grid"></div></section>
+    <section id="view-complaints" class="view hidden"><article class="panel full-panel"><div class="panel-heading"><div><h2>Maintenance requests</h2><p>Track each request from open to resolved.</p></div><select id="status-filter" class="search"><option value="All">All statuses</option><option>Open</option><option>In progress</option><option>Resolved</option></select></div><div class="table-wrap"><table><thead><tr><th>REQUEST</th><th>RESIDENT / ROOM</th><th>PRIORITY</th><th>STATUS</th><th>UPDATE</th></tr></thead><tbody id="complaints-table"></tbody></table></div></article></section>
+    <footer><span>STAYWISE <span class="footer-dot">•</span> RESIDENCE OS</span><span>Made for calmer campus living.</span></footer>
+  </main>
+</div>
+<div class="modal-backdrop hidden" id="resident-modal">
+  <form class="modal" id="resident-form"><button type="button" class="modal-close" id="close-resident-modal">×</button><div class="eyebrow"><span class="eyebrow-line"></span> RESIDENT DIRECTORY</div><h2>Register a resident</h2><p>Add a student to the residence directory. Room allocation can be done now or later.</p>
+    <div class="form-grid"><label>Full name <input name="name" required maxlength="100" placeholder="e.g. Priya Sharma"></label><label>Roll number <input name="roll_no" required maxlength="30" placeholder="e.g. 26CS001"></label><label>Department <input name="department" required maxlength="60" placeholder="e.g. Computer Science"></label><label>Academic year <select name="year" required><option value="">Select year</option><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option></select></label><label>Email <input name="email" type="email" maxlength="120" placeholder="student@example.com"></label><label>Phone <input name="phone" type="tel" maxlength="20" placeholder="Phone number"></label></div>
+    <div class="modal-actions"><button type="button" class="secondary-btn" id="cancel-resident-modal">Cancel</button><button class="primary-btn" type="submit">Register resident ↗</button></div><div id="resident-message" class="form-message"></div>
+  </form>
+</div>
+<div class="modal-backdrop hidden" id="allocation-modal">
+  <form class="modal" id="allocation-form"><button type="button" class="modal-close" id="close-allocation-modal">×</button><div class="eyebrow"><span class="eyebrow-line"></span> ROOM MANAGEMENT</div><h2>Allocate a room</h2><p>Choose a resident and an available room. Full rooms will not be offered.</p>
+    <label>Resident <select name="student_roll" id="allocation-student" required><option value="">Choose an unallocated resident</option></select></label><label style="margin-top:14px">Available room <select name="room_id" id="allocation-room" required><option value="">Choose a room</option></select></label><div class="modal-actions"><button type="button" class="secondary-btn" id="cancel-allocation-modal">Cancel</button><button class="primary-btn" type="submit">Confirm allocation ↗</button></div><div id="allocation-message" class="form-message"></div>
+  </form>
+</div>
+<div class="modal-backdrop hidden" id="modal">
+  <form class="modal" id="complaint-form"><button type="button" class="modal-close" id="close-modal">×</button><div class="eyebrow"><span class="eyebrow-line"></span> MAINTENANCE DESK</div><h2>Log a request</h2><p>Tell us what needs attention and we’ll get it on the list.</p>
+    <label>Resident <select name="student_roll" id="resident-select"><option value="">Not specified</option></select></label>
+    <div class="form-row"><label>Category <select name="category" required><option value="">Choose category</option><option>Electrical</option><option>Plumbing</option><option>Cleaning</option><option>Furniture</option><option>Internet</option><option>Other</option></select></label><label>Priority <select name="priority"><option>Low</option><option selected>Medium</option><option>High</option></select></label></div>
+    <label>Description <textarea name="description" rows="4" maxlength="300" required placeholder="Describe the issue…"></textarea></label><div class="modal-actions"><button type="button" class="secondary-btn" id="cancel-modal">Cancel</button><button class="primary-btn" type="submit">Submit request ↗</button></div><div id="form-message" class="form-message"></div>
+  </form>
+</div>
+<div id="toast" class="toast hidden"></div>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>
